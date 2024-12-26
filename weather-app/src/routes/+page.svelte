@@ -15,7 +15,7 @@
 
       return previous;
     },
-    { temperaturePoints: <Point[]>[], humidityPoints: <Point[]>[] },
+    { temperaturePoints: [] as Point[], humidityPoints: [] as Point[] },
   );
 </script>
 
@@ -23,17 +23,17 @@
   <title>Weather</title>
 </svelte:head>
 
-<div class="h-full flex flex-col">
-  <div class="flex-1 basis-1/6 flex flex-col justify-center">
+<div class="flex h-full flex-col">
+  <div class="flex flex-1 basis-1/6 flex-col justify-center">
     <Measurements
       temperature={newestMeasurement.temperature}
       humidity={newestMeasurement.humidity}
     />
   </div>
-  <div class="flex-1 basis-1/3 min-h-[15em]">
+  <div class="min-h-[15em] flex-1 basis-1/3">
     <Chart points={temperaturePoints} unit="°C" color="red" />
   </div>
-  <div class="flex-1 basis-1/3 min-h-[15em]">
+  <div class="min-h-[15em] flex-1 basis-1/3">
     <Chart points={humidityPoints} unit="%" color="blue" />
   </div>
   <div class="h-[5vh]" />

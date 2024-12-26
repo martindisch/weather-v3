@@ -1,9 +1,8 @@
 import type { PageServerLoad } from "./$types";
+import { db } from "$lib/database";
 
-export const load: PageServerLoad = async ({ platform }) => {
-  const db = platform!.env.DB;
-
-  const { results: measurements } = await db
+export const load: PageServerLoad = () => {
+  const measurements = db
     .prepare(
       `
         SELECT * FROM measurements

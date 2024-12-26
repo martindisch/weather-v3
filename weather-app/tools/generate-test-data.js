@@ -1,15 +1,19 @@
-import fs from "node:fs/promises";
+import Database from "better-sqlite3";
 
-const timestamp = Math.floor(Date.now() / 1000) - 86400;
-const insertStatements = [...Array(288).keys()]
-  .map((i) => [timestamp + i * 5 * 60, 10 + i * 0.03472, 20 - i * 0.03472])
-  .map(
-    ([timestamp, temperature, humidity]) =>
-      `INSERT INTO measurements VALUES(${timestamp},${temperature},${humidity});`,
-  )
-  .join("\n");
+const db = new Database("measurements.sqlite3");
 
-const command = `DELETE FROM measurements;
-${insertStatements}`;
+const insert = db.prepare(
+  "REPLACE INTO measurements VALUES (@timestamp, @temperature, @humidity);",
+);
+const insertMany = db.transaction((measurements) => {
+  for (const measurement of measurements) insert.run(measurement);
+});
 
-await fs.writeFile("testdata.sql", command);
+const currentTimestamp = Math.floor(Date.now() / 1000) - 86400;
+const measurements = [...Array(288).keys()].map((i) => ({
+  timestamp: currentTimestamp + i * 5 * 60,
+  temperature: 10 + i * 0.03472,
+  humidity: 20 - i * 0.03472,
+}));
+
+insertMany(measurements);
