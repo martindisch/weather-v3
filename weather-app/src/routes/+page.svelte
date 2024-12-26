@@ -36,5 +36,5 @@
   <div class="min-h-[15em] flex-1 basis-1/3">
     <Chart points={humidityPoints} unit="%" color="blue" />
   </div>
-  <div class="h-[5vh]" />
+  <div class="h-[5vh]"></div>
 </div>

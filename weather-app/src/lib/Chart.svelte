@@ -41,7 +41,7 @@
     <Pancake.Quadtree data={decimatedPoints} let:closest>
       {#if closest}
         <Pancake.Point x={closest.x} y={closest.y}>
-          <div class="focus" />
+          <div class="focus"></div>
           <div class="tooltip">
             <strong>{closest.y.toFixed(1)} {unit}</strong>
             <span>{closest.x.toLocaleTimeString()}</span>
