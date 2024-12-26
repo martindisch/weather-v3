@@ -12,9 +12,9 @@ use std::{
 };
 
 const PIN: u8 = 4;
-const ENDPOINT: &str = "https://weather-v3.pages.dev/api/measurements";
 
 fn main() -> Result<()> {
+    let endpoint = env::var("ENDPOINT").wrap_err("Missing ENDPOINT")?;
     let api_key = env::var("API_KEY").wrap_err("Missing API_KEY")?;
 
     let measurement = measure()?;
@@ -25,7 +25,7 @@ fn main() -> Result<()> {
     let mut pending_measurements = read_pending(&pending_path)?;
     pending_measurements.push(measurement);
 
-    match publish(&pending_measurements, &api_key) {
+    match publish(&pending_measurements, &endpoint, &api_key) {
         Ok(_) => {
             fs::remove_file(pending_path).ok();
             Ok(())
@@ -77,9 +77,13 @@ fn read_pending(path: &Path) -> Result<Vec<Measurement>> {
     Ok(pending_measurements)
 }
 
-fn publish(measurements: &[Measurement], api_key: &str) -> Result<()> {
+fn publish(
+    measurements: &[Measurement],
+    endpoint: &str,
+    api_key: &str,
+) -> Result<()> {
     let res = Client::new()
-        .post(ENDPOINT)
+        .post(endpoint)
         .header("x-api-key", api_key)
         .json(&measurements)
         .send()?;

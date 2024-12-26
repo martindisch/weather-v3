@@ -17,8 +17,8 @@ measurements to the backend, simply set up a cron schedule pointing to your
 binary.
 
 ```
-*/5 * * * * API_KEY=<INSERT> /home/pi/weather-v3/weather-station/target/release/weather-station 2>&1 | /usr/bin/logger -t weather-station
+*/5 * * * * ENDPOINT=https://your-domain/api/measurements API_KEY=<INSERT> /home/pi/weather-v3/weather-station/target/release/weather-station 2>&1 | /usr/bin/logger -t weather-station
 ```
 
-Replace `<INSERT>` with the API key you configured when setting up the
-[backend](../weather-app/README.md).
+Replace the domain and `<INSERT>` with the API key you configured when setting
+up the [backend](../weather-app/README.md).
