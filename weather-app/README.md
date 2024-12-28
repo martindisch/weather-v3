@@ -33,6 +33,7 @@ ExecStart=/home/weather-app/.local/share/fnm/node-versions/v23.5.0/installation/
 WorkingDirectory=/home/weather-app/weather-v3/weather-app
 User=weather-app
 Environment=API_KEY=<INSERT>
+Environment=BODY_SIZE_LIMIT=Infinity
 
 [Install]
 WantedBy=multi-user.target
@@ -46,6 +47,7 @@ server {
 
     location / {
         proxy_buffering off;
+        client_max_body_size 50m;
         proxy_pass http://localhost:3000;
     }
 
