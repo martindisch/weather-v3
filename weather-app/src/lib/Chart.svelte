@@ -12,10 +12,16 @@
 
   const minx = decimatedPoints[0]!.x;
   const maxx = decimatedPoints[decimatedPoints.length - 1]!.x;
+  const firsty = decimatedPoints[0]!.y;
   let miny = +Infinity;
   let maxy = -Infinity;
+  let hasValidData = false;
 
   for (const point of decimatedPoints) {
+    if (point.y - firsty >= 0.01) {
+      hasValidData = true;
+    }
+
     if (point.y < miny) {
       miny = point.y;
     }
@@ -24,33 +30,41 @@
       maxy = point.y;
     }
   }
+
+  let error = hasValidData ? null : "Invalid data";
 </script>
 
-<div class="chart">
-  <Pancake.Chart x1={minx} x2={maxx} y1={miny} y2={maxy}>
-    <Pancake.Grid horizontal let:value let:last>
-      <div class="grid-line horizontal"><span>{value} {last ? unit : ""}</span></div>
-    </Pancake.Grid>
+{#if error}
+  <div class="flex h-full items-center justify-center bg-gray-300 opacity-25">
+    <span class="text-4xl md:text-5xl">Bad data</span>
+  </div>
+{:else}
+  <div class="chart">
+    <Pancake.Chart x1={minx} x2={maxx} y1={miny} y2={maxy}>
+      <Pancake.Grid horizontal let:value let:last>
+        <div class="grid-line horizontal"><span>{value} {last ? unit : ""}</span></div>
+      </Pancake.Grid>
 
-    <Pancake.Svg>
-      <Pancake.SvgLine data={decimatedPoints} let:d>
-        <path {d} style:stroke={color} />
-      </Pancake.SvgLine>
-    </Pancake.Svg>
+      <Pancake.Svg>
+        <Pancake.SvgLine data={decimatedPoints} let:d>
+          <path {d} style:stroke={color} />
+        </Pancake.SvgLine>
+      </Pancake.Svg>
 
-    <Pancake.Quadtree data={decimatedPoints} let:closest>
-      {#if closest}
-        <Pancake.Point x={closest.x} y={closest.y}>
-          <div class="focus"></div>
-          <div class="tooltip">
-            <strong>{closest.y.toFixed(1)} {unit}</strong>
-            <span>{closest.x.toLocaleTimeString()}</span>
-          </div>
-        </Pancake.Point>
-      {/if}
-    </Pancake.Quadtree>
-  </Pancake.Chart>
-</div>
+      <Pancake.Quadtree data={decimatedPoints} let:closest>
+        {#if closest}
+          <Pancake.Point x={closest.x} y={closest.y}>
+            <div class="focus"></div>
+            <div class="tooltip">
+              <strong>{closest.y.toFixed(1)} {unit}</strong>
+              <span>{closest.x.toLocaleTimeString()}</span>
+            </div>
+          </Pancake.Point>
+        {/if}
+      </Pancake.Quadtree>
+    </Pancake.Chart>
+  </div>
+{/if}
 
 <style>
   .chart {
