@@ -18,7 +18,7 @@
   let hasValidData = false;
 
   for (const point of decimatedPoints) {
-    if (point.y - firsty >= 0.01) {
+    if (Math.abs(point.y - firsty) >= 0.01) {
       hasValidData = true;
     }
 
