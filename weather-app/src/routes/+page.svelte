@@ -5,7 +5,7 @@
 
   export let data: { measurements: Measurement[] };
 
-  const newestMeasurement = data.measurements[data.measurements.length - 1]!;
+  const newestMeasurement = data.measurements[data.measurements.length - 1];
 
   const { temperaturePoints, humidityPoints } = data.measurements.reduce(
     (previous, current) => {
@@ -24,17 +24,23 @@
 </svelte:head>
 
 <div class="flex h-full flex-col">
-  <div class="flex flex-1 basis-1/6 flex-col justify-center">
-    <Measurements
-      temperature={newestMeasurement.temperature}
-      humidity={newestMeasurement.humidity}
-    />
-  </div>
-  <div class="min-h-[15em] flex-1 basis-1/3">
-    <Chart points={temperaturePoints} unit="°C" color="red" />
-  </div>
-  <div class="min-h-[15em] flex-1 basis-1/3">
-    <Chart points={humidityPoints} unit="%" color="blue" />
-  </div>
-  <div class="h-[5vh]"></div>
+  {#if newestMeasurement}
+    <div class="flex flex-1 basis-1/6 flex-col justify-center">
+      <Measurements
+        temperature={newestMeasurement.temperature}
+        humidity={newestMeasurement.humidity}
+      />
+    </div>
+    <div class="min-h-[15em] flex-1 basis-1/3">
+      <Chart points={temperaturePoints} unit="°C" color="red" />
+    </div>
+    <div class="min-h-[15em] flex-1 basis-1/3">
+      <Chart points={humidityPoints} unit="%" color="blue" />
+    </div>
+    <div class="h-[5vh]"></div>
+  {:else}
+    <div class="flex flex-1 items-center justify-center">
+      <span class="text-4xl md:text-5xl">No data for the last day</span>
+    </div>
+  {/if}
 </div>
