@@ -59,3 +59,11 @@ server {
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 ```
+
+If you want to keep backups somewhere you can add something like this to your
+crontab:
+
+```crontab
+# Backup weather-v3 measurements and keep only latest 30
+7 8 * * * scp weather-app@<IP>:weather-v3/weather-app/measurements.sqlite3 <BACKUP_PATH>/$(date -Iseconds).sqlite3 && cd <BACKUP_PATH> && ls | head -n -30 | xargs rm -r
+```
