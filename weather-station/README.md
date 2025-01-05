@@ -16,7 +16,7 @@ To make it take a measurement and post it and all other unpublished
 measurements to the backend, simply set up a cron schedule pointing to your
 binary.
 
-```
+```crontab
 */5 * * * * ENDPOINT=https://your-domain/api/measurements API_KEY=<INSERT> /home/pi/weather-v3/weather-station/target/release/weather-station 2>&1 | /usr/bin/logger -t weather-station
 ```
 
